@@ -1,5 +1,5 @@
 
-const bearer_token = 'AAAAAAAAAAAAAAAAAAAAACsgGwEAAAAAqyesPKLAh1ylP20SjKyV87DzAMs%3DbPdoxhPtbOMXLCI4KTrfrrrgNOZtQ07iw9gNhB02lNteg7p5J7'
+const bearer_token = process.env.NEXT_PUBLIC_TWTR_BEARER
 
 function fetchTweets(handle) {
   return fetch(`https://api.twitter.com/2/tweets/search/recent?query=from:${handle}`, {
