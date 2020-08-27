@@ -1,30 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+Web app to filter tweets based on which ones contain price charts. Split into a web app and a chart id api.
+Web app is a statically generated nextjs app hosted on Firebase. Chart id api is a python app running in a Docker
+container, hosted by Google cloud run.
 
-First, run the development server:
+The calls to the api are simple GET requests with a query parameter containing the url of an image. Responses get cached
+by Firebase for the max duration (1 month).
 
-```bash
+# Web app
+
+Source located under the /app dir.
+Deploys to firebase hosting.
+
+## Test locally
+
+```
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Chart identification API
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Source located under the /api dir.
 
-## Learn More
+## Test locally
 
-To learn more about Next.js, take a look at the following resources:
+Run python directly
+```
+python .\app\server.py 'serve' 
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Or test within Docker container
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- build the image...
+```
+docker build -t chrts-api . 
+```
 
-## Deploy on Vercel
+- run the container...
+```
+docker run --rm -it -p 5000:5000 chrts-api
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- list running Docker containers
+```
+docker ps
+```
+- list Docker images
+```
+docker images
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Deploy to Google Cloud
+
+Build the Docker image from the Dockerfile and push it to cloud build
+
+```
+gcloud builds submit --tag gcr.io/chrtsio/chrts-api
+```
+Then deploy the image
+```
+gcloud beta run deploy --image gcr.io/chrtsio/chrts-api --platform managed --region us-east4
+```
+And deploy the Firebase hosting files and config
+```
+firebase deploy --only hosting
+```
+
+## Test URLs
+
+https://chrtsio.web.app/ischart?url=https://lh3.googleusercontent.com/6vGE9yq9iaakdf8pMzyVe2iXi-xDNN0yGJSr6elg3oJ_DWd4gZ4pBX8MqT4g_N1ThlKMwmUg=w640-h400-e365
+
+https://chrtsio.web.app/ischart?url=https://i0.wp.com/cdn-prod.medicalnewstoday.com/content/images/articles/279/279359/two-eggplants-on-a-wooden-table.jpg?w=1155&h=1444
+
+https://chrtsio.web.app/ischart?url=https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60
+
+https://chrtsio.web.app/ischart?url=https://pbs.twimg.com/media/EgCeKrkWAAETDyg?format=jpg&name=small
+
+https://chrtsio.web.app/ischart?url=https://pbs.twimg.com/media/Ef94MysWAAEkgDG?format=jpg&name=small

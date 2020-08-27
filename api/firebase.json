@@ -1,0 +1,28 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/ischart",
+        "run": {
+          "serviceId": "chrts-api",
+          "region": "us-east4"
+        }
+      }
+    ],
+    "headers": [
+      {
+        "source": "ischart",
+        "headers": [{
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, s-maxage=2592000"
+        }]
+      }
+    ]
+  }
+}
