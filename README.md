@@ -9,7 +9,7 @@ by Firebase for the max duration (1 month).
 # Web app
 
 Source located under the /app dir.
-Deploys to firebase hosting.
+Deploys to Vercel.
 
 ## Test locally
 
@@ -23,16 +23,18 @@ Source located under the /api dir.
 
 ## Test locally
 
+From /api dir...
+
 Run python directly
 ```
-python .\app\server.py 'serve' 
+python server.py 'serve' 
 ```
 
 Or test within Docker container
 
 - build the image...
 ```
-docker build -t chrts-api . 
+docker build -t chrts-api .
 ```
 
 - run the container...

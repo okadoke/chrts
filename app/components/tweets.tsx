@@ -1,13 +1,8 @@
 import useSWR from 'swr'
 import { Spinner } from 'components/spinner'
+import TweetContainer from 'components/tweet_container'
 
 let url_regex = /(https?:\/\/[^\s]+)/
-
-type IsChart = {
-  prediction?: string
-  error?: string
-  msg?: string
-}
 
 function fetchTweets(handle) {
   if (!handle) return null
@@ -16,43 +11,6 @@ function fetchTweets(handle) {
     method: 'GET'
   })
   .then(r => r.json())
-}
-
-function hasChart(key, tweet) {
-  // console.log(tweet.urls)
-  const promises = tweet.attachments.media.map(media => {
-    console.log('analyzing', media.url)
-    return fetch(`https://chrtsio.web.app/ischart?url=${media.url}`)
-    .then(r => r.json())
-  })
-  
-  return Promise.all(promises)
-  .then(results => {
-    console.log(results)
-    return { hasCharts: results.some((r: IsChart) => r.prediction === 'chart') }
-  })
-}
-
-function Tweet({tweet}) {
-  // const url_tests = tweet.urls.map(url => `https://chrtsio.web.app/ischart?url=${url}`)
-  // key is combo of 'ischart' and the tweet
-  let {data, error} = useSWR(['ischart', tweet], hasChart)
-  if (error) {
-    return <p>{JSON.stringify(error)}</p>
-  }
-  console.log(tweet)
-  let content
-  if (data) {
-    content = data.hasCharts ? <img src={tweet.attachments.media[0].url} /> : ''
-  }
-  else {
-    content = <p>Analyzing links...</p>
-  }
-  return (
-    <li className="px-4 py-2 border rounded">
-      {content}
-    </li>
-  )
 }
 
 function TweetList({tweets}) {
@@ -71,9 +29,11 @@ function TweetList({tweets}) {
   //   }
   // }
   return (
-    <ul className="grid grid-cols-1 gap-y-4">
+    <ul className="grid grid-cols-1 gap-y-0 border border-b-0 border-gray-500">
       {filtered_tweets.map(tweet => (
-        <Tweet tweet={tweet} key={tweet.id} />
+        <li key={tweet.id} className="border-b border-gray-500">
+          <TweetContainer tweet={tweet} />
+        </li>
       ))}
     </ul>
   )
