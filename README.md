@@ -11,6 +11,19 @@ by Firebase for the max duration (1 month).
 Source located under the /app dir.
 Deploys to Vercel.
 
+## Twitter Auth
+
+Currently using Auth0.
+
+- Setup domains and redirects in developer portal to point to Auth0 urls
+  - App Url: https://chrts.us.auth0.com
+  - Redirect Url: https://chrts.us.auth0.com/login/callback
+
+### Links
+
+- Developer portal: https://developer.twitter.com/en/portal/dashboard
+- Nextjs + Auth0 guide: https://www.codemochi.com/blog/2020-04-01-how-to-add-auth0-nextjs
+
 ## Test locally
 
 ```

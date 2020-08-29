@@ -1,26 +1,27 @@
 import useUser from 'data/use_user'
 import { useEffect } from 'react'
 import { Router } from 'next/router'
+import useSWR from 'swr'
+import { Spinner } from 'components/spinner'
+
+function fetchProfile(url) {
+  return fetch(url).then(r => r.json())
+}
 
 export default function Dashboard() {
-  const { user, loading, loggedOut, mutate } = useUser()
-  useEffect(() => {
-    if (loggedOut) {
-      Router.replace('/')
-    }
-  }, [loggedOut])
 
-  if (loggedOut) {
-    return 'redirecting...'
+  const {data, error} = useSWR('/api/profile', fetchProfile)
+
+  if (error) {
+    return <p>{JSON.stringify(error)}</p>
   }
-
-  if (loading) {
-    return 'loading'
+  if (!data) {
+    return <Spinner />
   }
-
+  console.log(data)
   return (
     <>
-    <p>Hello {user.handle}</p>
+    <p>Hello {data.name}</p>
     <p>Charts your friends have posted:</p>
     </>
   )
