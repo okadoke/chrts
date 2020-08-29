@@ -41,10 +41,7 @@ export default function TweetContainer({tweet}) {
     if (!data) {
       return <div className="flex items-center"><Spinner size={5} /><p className="ml-2">Analyzing links...</p></div>
     }
-    const anyCharts = data.some((urlPred: UrlPrediction) => {
-      console.log(urlPred)
-      return urlPred[1].prediction === 'chart'
-    })
+    const anyCharts = data.some((urlPred: UrlPrediction) => urlPred[1].prediction === 'chart')
     if (!anyCharts) {
       return <p>No charts here, <a className="underline text-blue-500 cursor-pointer">load anyway...</a></p>
     }
