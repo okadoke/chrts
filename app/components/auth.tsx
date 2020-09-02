@@ -1,30 +1,39 @@
-import useUser from 'data/use_user'
 import useSWR from 'swr'
 import { useState } from 'react'
-
-async function authUser() {
-  const resp = await fetch('/api/login')
-}
+import {Spinner} from 'components/spinner'
+import { useAuth } from 'lib/use_auth'
 
 export default function Auth() {
-  const [authState, setAuthState] = useState('signed_out')
-  // const { data, error } = useSWR(authState === 'signing_in' ? 'twitter_auth' : null, authUser)
+  const auth = useAuth()
+  const [isOpen, setIsOpen] = useState(false)
 
-  const handleClick = async (event) => {
-    if (authState === 'signed_out') {
-      setAuthState('signing_in')
-      const resp = await authUser()
-      console.log(resp)
-    }
+  const toggleModal = () => setIsOpen(!isOpen)
+
+  if (auth.state === 'unknown') {
+    return <Spinner size={5}/>
   }
-
+  if (!auth.user) { 
+    return (
+      <button
+        className="px-3 py-2 font-bold bg-blue-500 text-white text-sm rounded-full shadow focus:outline-none hover:bg-blue-600"
+        onClick={auth.signin}
+        // href="/api/login"
+      >
+        Connect Twitter Account
+      </button>
+    )
+  }
   return (
-    <a
-      className="px-3 py-2 font-bold bg-blue-500 text-white text-sm rounded-full shadow focus:outline-none hover:bg-blue-600"
-      // onClick={handleClick}
-      href="/api/login"
-    >
-      Connect Twitter Account
-    </a>
+    <div className="relative">
+      <img src={auth.user.photoURL} onClick={toggleModal} className="w-10 h-10 rounded-full cursor-pointer" />
+      { isOpen && 
+        <div>
+          <button onClick={toggleModal} className="fixed inset-0 h-full w-full bg-black opacity-25" />
+          <div onClick={toggleModal} className="absolute right-0 mt-2 w-32 px-3 py-1 rounded bg-white shadow">
+            <a onClick={auth.signout} href="#" className="block">Sign Out</a>
+          </div>
+        </div>
+      } 
+    </div>
   )
 }

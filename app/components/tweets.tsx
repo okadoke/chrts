@@ -1,21 +1,20 @@
 import useSWR from 'swr'
 import { Spinner } from 'components/spinner'
 import TweetContainer from 'components/tweet_container'
+import queryApi from 'lib/query_api'
+import { useAuth } from 'lib/use_auth'
 
 let url_regex = /(https?:\/\/[^\s]+)/
 
-function fetchTweets(handle) {
+function fetchTweets(handle, user) {
   if (!handle) return null
 
-  return fetch(`/api/tweets/${handle}`, {
-    method: 'GET'
-  })
-  .then(r => r.json())
+  return queryApi(`/api/tweets/${handle}`, user)
 }
 
 function TweetList({tweets}) {
   // extract and store urls
-  console.log(tweets)
+  console.log('TweetList:', tweets)
   const filtered_tweets = tweets.data
     .filter(tweet => tweet.attachments && tweet.attachments.media_keys)
     .map(tweet => {
@@ -39,9 +38,10 @@ function TweetList({tweets}) {
   )
 }
 
-function TweetsByHandle({handle}) {
+function TweetsByHandle({handle, className}) {
   console.log("Rendering TweetsByHandle")
-  let {data, error} = useSWR(handle, fetchTweets)
+  const auth = useAuth()
+  let {data, error} = useSWR([handle, auth.user], fetchTweets)
 
   let content
   if (data) {
@@ -57,8 +57,7 @@ function TweetsByHandle({handle}) {
   }
 
   return (
-    <div>
-      <h1 className="font-black text-4xl">Tweets from {handle}</h1>
+    <div className={className}>
       {content}      
     </div>
   )

@@ -32,7 +32,7 @@ export default function TweetContainer({tweet}) {
   // we don't need to use the key because it's derived from the tweet
   let {data, error} = useSWR(key, key => chartPredictions(tweet), {
     revalidateOnFocus: false,
-    loadingTimeout: 3000
+    loadingTimeout: 5000
   })
   if (error) {
     return <p>{JSON.stringify(error)}</p>

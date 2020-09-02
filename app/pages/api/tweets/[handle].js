@@ -1,22 +1,20 @@
+import query from 'lib/api/twitter_query'
+import validateRequest from 'lib/api/validate'
 
-const bearer_token = process.env.NEXT_PUBLIC_TWTR_BEARER
+export default async function(req, res) {
+  const { credentials, user } = await validateRequest(req, res)
+  if (res.statusCode !== 200) {
+    return
+  }
 
-function fetchTweets(handle) {
-  return fetch(`https://api.twitter.com/2/tweets/search/recent?query=from:${handle}&expansions=attachments.media_keys&media.fields=preview_image_url,type,url&tweet.fields=attachments`, {
-    method: 'GET',
-    headers: new Headers({
-      'Authorization': `Bearer ${bearer_token}`,
-      'Content-Type': 'application/json'
-    })
+  const handle = req.handle
+  return query({
+    url: `https://api.twitter.com/2/tweets/search/recent?query=from%3A${handle}&expansions=attachments.media_keys&media.fields=preview_image_url,type,url&tweet.fields=attachments`,
+    credentials
   })
-  .then(r => r.json())
-}
-
-export default ({query}, res) => {
-  return fetchTweets(query.handle)
-  .then(tweets => {
+  .then(data => {
     res.statusCode = 200
-    res.json(tweets)
+    res.json(data)
   })
   .catch(error => {
     res.statusCode = 500
