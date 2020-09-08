@@ -6,8 +6,8 @@ export default async function(req, res) {
   if (res.statusCode !== 200) {
     return
   }
-
-  const handle = req.handle
+  const handle = req.query.handle
+  
   return query({
     url: `https://api.twitter.com/2/tweets/search/recent?query=from%3A${handle}&expansions=attachments.media_keys&media.fields=preview_image_url,type,url&tweet.fields=attachments`,
     credentials

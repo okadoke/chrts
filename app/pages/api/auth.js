@@ -31,7 +31,7 @@ export default async (req, res) => {
     const token = jwt.sign(credentials, process.env.jwtSecret)
     res.setHeader(
       'Set-Cookie',
-      [`token=${token}; HttpOnly`]
+      [`token=${token}; HttpOnly; SameSite=Strict`]
     )
     res.statusCode = 200
     res.send('OK')

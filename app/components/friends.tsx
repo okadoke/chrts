@@ -16,7 +16,7 @@ export default function Friends({twUsers}) {
   }
   return (
     <ul>
-      { twUsers.slice(1,2).map(twUser => {
+      { twUsers.map(twUser => {
           return <li key={twUser.id}><Friend twUser={twUser}/></li>
         })
       }

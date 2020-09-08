@@ -14,6 +14,7 @@ const oauth = OAuth({
 })
 
 export default function query({url, credentials, method, useAppAuth}) {
+  console.log('querying', url)
   const request_data = {
     url,
     method: method || 'GET'

@@ -15,18 +15,21 @@ function fetchTweets(handle, user) {
 function TweetList({tweets}) {
   // extract and store urls
   console.log('TweetList:', tweets)
-  const filtered_tweets = tweets.data
-    .filter(tweet => tweet.attachments && tweet.attachments.media_keys)
-    .map(tweet => {
-      tweet.attachments.media = tweet.attachments.media_keys.map(key => tweets.includes.media.find(media => media.media_key === key))
-      return tweet
-    })
-  // for (let i = 0; i < tweets.data.length; i++) {
-  //   let tweet = tweets.data[i]
-  //   if (tweet.attachments && tweet.attachments.media_keys) {
-  //     tweet.attachments.media = tweet.attachments.media_keys.map(key => tweets.includes.find(inc => inc.media_key === key))
-  //   }
-  // }
+
+  let filtered_tweets = []
+  if (tweets.data) {
+    filtered_tweets = 
+      tweets.data
+      .filter(tweet => tweet.attachments && tweet.attachments.media_keys)
+      .map(tweet => {
+        tweet.attachments.media = tweet.attachments.media_keys.map(key => tweets.includes.media.find(media => media.media_key === key))
+        return tweet
+      })
+  }
+
+  if (filtered_tweets.length === 0) {
+    return <p>No charts here, didn't even find any tweets with images.</p>
+  }
   return (
     <ul className="grid grid-cols-1 gap-y-0 border border-b-0 border-gray-500">
       {filtered_tweets.map(tweet => (
@@ -38,7 +41,7 @@ function TweetList({tweets}) {
   )
 }
 
-function TweetsByHandle({handle, className}) {
+function TweetsByHandle({handle, className = ''}) {
   console.log("Rendering TweetsByHandle")
   const auth = useAuth()
   let {data, error} = useSWR([handle, auth.user], fetchTweets)

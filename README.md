@@ -13,7 +13,7 @@ Deploys to Vercel.
 
 ## Twitter Auth
 
-Currently using Auth0.
+Currently using Firebase Auth.
 
 - Setup domains and redirects in developer portal to point to Auth0 urls
   - App Url: https://chrts.us.auth0.com
@@ -22,8 +22,22 @@ Currently using Auth0.
 ### Links
 
 - Developer portal: https://developer.twitter.com/en/portal/dashboard
+- Login with Twitter: https://developer.twitter.com/en/docs/authentication/guides/log-in-with-twitter
 - Nextjs + Auth0 guide: https://www.codemochi.com/blog/2020-04-01-how-to-add-auth0-nextjs
 
+## Firebase on the backend (vercel functions)
+
+Vercel will load .env.local file to bring in process.env.* environment variables.
+In order to store the firebase admin key in an env. var it needs to be on a single line, so base64 encode
+the json file that Firebase gives via the 'Service account' panel.
+
+from linux:
+```
+base64 -w 0 ./chrtsio-firebase-adminsdk-9hi4z-330f096b1c.json > chrtsio-firebase-admin.txt
+```
+Then copy the single line of text in the output file to the .env.local file (and the vercel dashboard)
+
+it to a single string
 ## Test locally
 
 ```
