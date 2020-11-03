@@ -1,31 +1,31 @@
 {
-  "name": "chrts",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@auth0/nextjs-auth0": "^0.16.0",
-    "firebase": "^7.19.1",
-    "firebase-admin": "^9.1.1",
-    "jsonwebtoken": "^8.5.1",
-    "next": "9.5.2",
-    "next-auth": "^3.1.0",
-    "oauth-1.0a": "^2.2.6",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "scriptjs": "^2.5.9",
-    "swr": "^0.3.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/typography": "^0.2.0",
-    "@types/node": "^14.0.27",
-    "@types/react": "^16.9.46",
-    "@types/react-dom": "^16.9.8",
-    "tailwindcss": "^1.7.3",
-    "typescript": "^3.9.7"
-  }
+	"name": "chrts",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev -p 3000",
+		"build": "next build",
+		"start": "next start"
+	},
+	"dependencies": {
+		"@auth0/nextjs-auth0": "^0.16.0",
+		"firebase": "^7.19.1",
+		"firebase-admin": "^9.1.1",
+		"jsonwebtoken": "^8.5.1",
+		"next": "9.5.2",
+		"next-auth": "^3.1.0",
+		"oauth-1.0a": "^2.2.6",
+		"react": "16.13.1",
+		"react-dom": "16.13.1",
+		"scriptjs": "^2.5.9",
+		"swr": "^0.3.0"
+	},
+	"devDependencies": {
+		"@tailwindcss/typography": "^0.2.0",
+		"@types/node": "^14.0.27",
+		"@types/react": "^16.9.46",
+		"@types/react-dom": "^16.9.8",
+		"tailwindcss": "^1.7.3",
+		"typescript": "^3.9.7"
+	}
 }
